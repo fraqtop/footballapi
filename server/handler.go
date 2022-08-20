@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func CompetitionListHandler(ctx echo.Context) error {
+func competitionListHandler(ctx echo.Context) error {
 	competitionRepository, err := competition.NewReadRepository()
 	if err != nil {
 		return err
