@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  database:
+    image: postgres:14
+    container_name: footballapi-database
+    volumes:
+      - /mnt/footballdata:/var/lib/postgresql/data
+    ports:
+      - ${DATABASE_EXPOSE_PORT}:5432
+    env_file:
+      - .env
