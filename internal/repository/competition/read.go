@@ -2,7 +2,7 @@ package competition
 
 import (
 	"database/sql"
-	"github.com/fraqtop/footballapi/connection"
+	"github.com/fraqtop/footballapi/internal/connection"
 	"github.com/fraqtop/footballcore/competition"
 	"github.com/labstack/gommon/log"
 )

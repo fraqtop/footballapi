@@ -3,7 +3,7 @@ package connection
 import (
 	"database/sql"
 	"fmt"
-	"github.com/fraqtop/footballapi/config"
+	"github.com/fraqtop/footballapi/internal/config"
 )
 
 func Destroy() error {

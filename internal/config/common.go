@@ -18,7 +18,7 @@ func GetStorageConfig() *StorageConfig {
 	if storageConfig == nil {
 		storageConfig = &StorageConfig{
 			host:     os.Getenv("DATABASE_HOST"),
-			port:     os.Getenv("DATABASE_EXPOSE_PORT"),
+			port:     os.Getenv("DATABASE_INNER_PORT"),
 			user:     os.Getenv("POSTGRES_USER"),
 			password: os.Getenv("POSTGRES_PASSWORD"),
 			name:     os.Getenv("POSTGRES_DB"),
@@ -31,7 +31,7 @@ func GetStorageConfig() *StorageConfig {
 func GetServerConfig() *ServerConfig {
 	if serverConfig == nil {
 		serverConfig = &ServerConfig{
-			port: os.Getenv("SERVER_PORT"),
+			port: os.Getenv("SERVER_INNER_PORT"),
 		}
 	}
 

@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/fraqtop/footballapi/core/competition"
+	"github.com/fraqtop/footballapi/internal/repository/competition"
 	"github.com/labstack/echo/v4"
 	"net/http"
 )
