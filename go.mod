@@ -3,11 +3,14 @@ module github.com/fraqtop/footballapi
 go 1.17
 
 require (
-	github.com/fraqtop/footballcore v1.0.0 // indirect
-	github.com/joho/godotenv v1.4.0 // indirect
-	github.com/labstack/echo/v4 v4.8.0 // indirect
-	github.com/labstack/gommon v0.3.1 // indirect
-	github.com/lib/pq v1.10.6 // indirect
+	github.com/fraqtop/footballcore v1.0.0
+	github.com/joho/godotenv v1.4.0
+	github.com/labstack/echo/v4 v4.8.0
+	github.com/labstack/gommon v0.3.1
+	github.com/lib/pq v1.10.6
+)
+
+require (
 	github.com/mattn/go-colorable v0.1.11 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect

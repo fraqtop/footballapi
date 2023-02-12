@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/fraqtop/footballapi/config"
+	"github.com/fraqtop/footballapi/internal/config"
 	"github.com/labstack/echo/v4"
 )
 

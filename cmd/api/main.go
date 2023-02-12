@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"github.com/fraqtop/footballapi/config"
-	"github.com/fraqtop/footballapi/connection"
-	"github.com/fraqtop/footballapi/server"
+	"github.com/fraqtop/footballapi/internal/config"
+	"github.com/fraqtop/footballapi/internal/connection"
+	"github.com/fraqtop/footballapi/internal/server"
 	"log"
 	"net/http"
 	"os"
