@@ -10,8 +10,9 @@ services:
       - ${DATABASE_OUTER_PORT}:${DATABASE_INNER_PORT}
     env_file:
       - .env
+
   server:
-    image: golang:1.17-alpine
+    image: golang:1.20-alpine
     container_name: footballapi-server
     working_dir: /app/src
     volumes:
@@ -24,6 +25,12 @@ services:
     depends_on:
       - database
     entrypoint: "go run ./cmd/api"
+
+  cache:
+    image: redis:7-alpine
+    container_name: footballapi-cache
+    command: >
+      --requirepass ${CACHE_PASSWORD}
 
 volumes:
   apicompilecache:

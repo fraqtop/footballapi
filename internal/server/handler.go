@@ -1,6 +1,9 @@
 package server
 
 import (
+	"context"
+	"github.com/fraqtop/footballapi/internal/config"
+	"github.com/fraqtop/footballapi/internal/connection"
 	"github.com/fraqtop/footballapi/internal/repository/competition"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -9,21 +12,13 @@ import (
 func competitionListHandler(ctx echo.Context) error {
 	competitionRepository, err := competition.NewReadRepository()
 	if err != nil {
-		return err
+		return ctx.JSON(http.StatusInternalServerError, errorResponse{Reason: err.Error()})
 	}
+	cache := connection.GetRedisClient(config.GetCacheConfig())
+	competitionRepository = competition.NewRepositoryCacheProxy(context.Background(), cache, competitionRepository)
 
-	var (
-		responses []competitionResponse
-		response  competitionResponse
-	)
 
-	for _, competitionEntity := range competitionRepository.All() {
-		response = competitionResponse{
-			Id:    competitionEntity.Id(),
-			Title: competitionEntity.Title(),
-		}
-		responses = append(responses, response)
-	}
+	formatter := newCompetitionListFormatter()
 
-	return ctx.JSON(http.StatusOK, responses)
+	return ctx.JSON(http.StatusOK, formatter.format(competitionRepository.All()))
 }
