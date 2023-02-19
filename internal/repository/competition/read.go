@@ -11,6 +11,8 @@ type readRepository struct {
 	connection *sql.DB
 }
 
+var _ competition.ReadRepository = (*readRepository)(nil)
+
 func (r readRepository) All() []competition.Competition {
 	rows, err := r.connection.Query("select id, title from competition order by id")
 	var competitions []competition.Competition

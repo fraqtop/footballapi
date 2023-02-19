@@ -14,7 +14,7 @@ func (this competitionListFormatter) format(competitions []competition.Competiti
 	var response competitionResponse
 	for i := 0; i < len(competitions); i++ {
 		response = competitionResponse{
-			Id: competitions[i].Id(),
+			Id:    competitions[i].Id(),
 			Title: competitions[i].Title(),
 		}
 		this.responses = append(this.responses, response)

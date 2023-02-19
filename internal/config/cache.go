@@ -1,9 +1,9 @@
 package config
 
 type CacheConfig struct {
-	host string
+	host     string
 	password string
-	port string
+	port     string
 }
 
 func (this CacheConfig) Host() string {
