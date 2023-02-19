@@ -19,6 +19,8 @@ type RepositoryCacheProxy struct {
 	repository competition.ReadRepository
 }
 
+var _ competition.ReadRepository = (*RepositoryCacheProxy)(nil)
+
 func (this RepositoryCacheProxy) All() []competition.Competition {
 	bytes, err := this.redisClient.Get(this.ctx, KeyAll).Result()
 	var result []competition.Competition

@@ -10,6 +10,7 @@ var (
 	storageConfig *StorageConfig
 	serverConfig  *ServerConfig
 	cacheConfig *CacheConfig
+	brokerConfig *BrokerConfig
 )
 
 func Load() error {
@@ -50,4 +51,14 @@ func GetCacheConfig() *CacheConfig {
 	}
 
 	return cacheConfig
+}
+
+func GetBrokerConfig() *BrokerConfig {
+	if brokerConfig == nil {
+		brokerConfig = &BrokerConfig{
+			host: os.Getenv("BROKER_HOST"),
+		}
+	}
+
+	return brokerConfig
 }
