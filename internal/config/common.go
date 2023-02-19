@@ -9,8 +9,8 @@ import (
 var (
 	storageConfig *StorageConfig
 	serverConfig  *ServerConfig
-	cacheConfig *CacheConfig
-	brokerConfig *BrokerConfig
+	cacheConfig   *CacheConfig
+	brokerConfig  *BrokerConfig
 )
 
 func Load() error {
@@ -44,9 +44,9 @@ func GetServerConfig() *ServerConfig {
 func GetCacheConfig() *CacheConfig {
 	if cacheConfig == nil {
 		cacheConfig = &CacheConfig{
-			host: fmt.Sprintf("%s:%s", os.Getenv("CACHE_HOST"), os.Getenv("CACHE_PORT")),
+			host:     fmt.Sprintf("%s:%s", os.Getenv("CACHE_HOST"), os.Getenv("CACHE_PORT")),
 			password: os.Getenv("CACHE_PASSWORD"),
-			port: os.Getenv("CACHE_PORT"),
+			port:     os.Getenv("CACHE_PORT"),
 		}
 	}
 

@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	topic = "api.competition.sync"
+	topic   = "api.competition.sync"
 	groupId = "competition.sync"
 )
 

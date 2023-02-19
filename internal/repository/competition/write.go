@@ -26,7 +26,7 @@ func (w writeRepository) Save(competition competition.Competition) error {
 	return err
 }
 
-func NewWriteRepository(connection *sql.DB) competition.WriteRepository{
+func NewWriteRepository(connection *sql.DB) competition.WriteRepository {
 	if repository == nil {
 		repository = &writeRepository{
 			connection: connection,

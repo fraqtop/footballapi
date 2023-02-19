@@ -1,10 +1,10 @@
 package team
 
 import (
-"database/sql"
-"fmt"
-"github.com/fraqtop/footballcore/team"
-"strings"
+	"database/sql"
+	"fmt"
+	"github.com/fraqtop/footballcore/team"
+	"strings"
 )
 
 var repository *writeRepository

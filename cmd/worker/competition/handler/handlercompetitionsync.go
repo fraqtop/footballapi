@@ -24,7 +24,7 @@ func (this CompetitionConsumerHandler) Cleanup(session sarama.ConsumerGroupSessi
 func (this CompetitionConsumerHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	var (
 		competitions []competition.Competition
-		err error
+		err          error
 	)
 
 	for message := range claim.Messages() {

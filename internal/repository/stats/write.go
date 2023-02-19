@@ -95,7 +95,7 @@ func NewWriteRepository(
 	teamRepository coreteam.WriteRepository,
 	competitionRepository corecompetition.WriteRepository,
 	connection *sql.DB,
-	) stats.WriteRepository {
+) stats.WriteRepository {
 
 	if repository == nil {
 		repository = &writeRepository{

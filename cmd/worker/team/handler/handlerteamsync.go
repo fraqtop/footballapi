@@ -24,7 +24,7 @@ func (this TeamConsumerHandler) Cleanup(session sarama.ConsumerGroupSession) err
 func (this TeamConsumerHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	var (
 		teams []team.Team
-		err error
+		err   error
 	)
 
 	for message := range claim.Messages() {

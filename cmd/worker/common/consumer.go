@@ -11,9 +11,9 @@ import (
 )
 
 type ConsumingWorker struct {
-	handler sarama.ConsumerGroupHandler
-	topic string
-	groupId string
+	handler      sarama.ConsumerGroupHandler
+	topic        string
+	groupId      string
 	brokerConfig *config.BrokerConfig
 }
 
@@ -24,12 +24,12 @@ func GetConsumingWorker(
 	topic,
 	groupId string,
 	brokerConfig *config.BrokerConfig,
-	) *ConsumingWorker {
+) *ConsumingWorker {
 	if worker == nil {
 		worker = &ConsumingWorker{
-			handler: handler,
-			topic: topic,
-			groupId: groupId,
+			handler:      handler,
+			topic:        topic,
+			groupId:      groupId,
 			brokerConfig: brokerConfig,
 		}
 	}

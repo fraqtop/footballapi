@@ -17,7 +17,6 @@ func competitionListHandler(ctx echo.Context) error {
 	cache := connection.GetRedisClient(config.GetCacheConfig())
 	competitionRepository = competition.NewRepositoryCacheProxy(context.Background(), cache, competitionRepository)
 
-
 	formatter := newCompetitionListFormatter()
 
 	return ctx.JSON(http.StatusOK, formatter.format(competitionRepository.All()))

@@ -10,9 +10,9 @@ var cacheConnection *redis.Client
 func GetRedisClient(config *config.CacheConfig) *redis.Client {
 	if cacheConnection == nil {
 		cacheConnection = redis.NewClient(&redis.Options{
-			Addr: config.Host(),
+			Addr:     config.Host(),
 			Password: config.Password(),
-			DB: 0,
+			DB:       0,
 		})
 	}
 

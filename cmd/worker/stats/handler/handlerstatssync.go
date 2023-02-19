@@ -24,7 +24,7 @@ func (this StatsConsumerHandler) Cleanup(session sarama.ConsumerGroupSession) er
 func (this StatsConsumerHandler) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	var (
 		statsCollection []stats.Stats
-		err error
+		err             error
 	)
 
 	for message := range claim.Messages() {

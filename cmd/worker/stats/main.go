@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	topic = "api.stats.sync"
+	topic   = "api.stats.sync"
 	groupId = "stats.sync"
 )
 

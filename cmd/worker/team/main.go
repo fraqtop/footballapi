@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	topic = "api.team.sync"
+	topic   = "api.team.sync"
 	groupId = "team.sync"
 )
 
