@@ -4,8 +4,8 @@ import (
 	"github.com/fraqtop/footballapi/cmd/worker/common"
 	"github.com/fraqtop/footballapi/cmd/worker/team/handler"
 	"github.com/fraqtop/footballapi/internal/config"
-	"github.com/fraqtop/footballapi/internal/connection"
-	"github.com/fraqtop/footballapi/internal/repository/team"
+	"github.com/fraqtop/footballapi/internal/container"
+	"github.com/fraqtop/footballcore/team"
 	"log"
 )
 
@@ -20,17 +20,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	connectionEntity, err := connection.GetStorage()
+	err = container.Get().Invoke(func(repository team.WriteRepository) {
+		consumerHandler := handler.TeamConsumerHandler{
+			WriteRepository: repository,
+		}
+
+		worker := common.GetConsumingWorker(consumerHandler, topic, groupId, config.GetBrokerConfig())
+		worker.Start()
+	})
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer connection.Destroy()
-
-	teamWriteRepository := team.NewWriteRepository(connectionEntity)
-	consumerHandler := handler.TeamConsumerHandler{
-		WriteRepository: teamWriteRepository,
-	}
-
-	worker := common.GetConsumingWorker(consumerHandler, topic, groupId, config.GetBrokerConfig())
-	worker.Start()
 }
