@@ -3,7 +3,6 @@ package container
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"github.com/fraqtop/footballapi/internal/config"
 	"github.com/fraqtop/footballapi/internal/connection"
 	"github.com/fraqtop/footballapi/internal/output"
