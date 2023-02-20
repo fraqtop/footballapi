@@ -17,6 +17,7 @@ type RepositoryCacheProxy struct {
 	ctx         context.Context
 	redisClient redis.UniversalClient
 	repository  competition.ReadRepository
+	ttl         time.Duration
 }
 
 var _ competition.ReadRepository = (*RepositoryCacheProxy)(nil)
@@ -30,7 +31,7 @@ func (this RepositoryCacheProxy) All() []competition.Competition {
 		if err != nil {
 			log.Warnf("can't encode to json: %s", err)
 		} else {
-			this.redisClient.Set(this.ctx, KeyAll, jsonContent, time.Second*30)
+			this.redisClient.Set(this.ctx, KeyAll, jsonContent, this.ttl)
 		}
 	} else {
 		err = json.Unmarshal([]byte(bytes), &result)
@@ -46,10 +47,12 @@ func NewRepositoryCacheProxy(
 	ctx context.Context,
 	redisClient redis.UniversalClient,
 	repository competition.ReadRepository,
+	ttl time.Duration,
 ) *RepositoryCacheProxy {
 	return &RepositoryCacheProxy{
 		redisClient: redisClient,
 		ctx:         ctx,
 		repository:  repository,
+		ttl:         ttl,
 	}
 }

@@ -9,8 +9,6 @@ import (
 	"strings"
 )
 
-var repository *writeRepository
-
 type writeRepository struct {
 	connection                 *sql.DB
 	competitionWriteRepository corecompetition.WriteRepository
@@ -96,14 +94,9 @@ func NewWriteRepository(
 	competitionRepository corecompetition.WriteRepository,
 	connection *sql.DB,
 ) stats.WriteRepository {
-
-	if repository == nil {
-		repository = &writeRepository{
-			connection:                 connection,
-			competitionWriteRepository: competitionRepository,
-			teamWriteRepository:        teamRepository,
-		}
+	return &writeRepository{
+		connection:                 connection,
+		competitionWriteRepository: competitionRepository,
+		teamWriteRepository:        teamRepository,
 	}
-
-	return repository
 }

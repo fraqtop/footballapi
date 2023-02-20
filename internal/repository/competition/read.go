@@ -2,7 +2,6 @@ package competition
 
 import (
 	"database/sql"
-	"github.com/fraqtop/footballapi/internal/connection"
 	"github.com/fraqtop/footballcore/competition"
 	"github.com/labstack/gommon/log"
 )
@@ -36,10 +35,6 @@ func (r readRepository) All() []competition.Competition {
 	return competitions
 }
 
-func NewReadRepository() (competition.ReadRepository, error) {
-	connectionInstance, err := connection.GetStorage()
-	if err != nil {
-		return nil, err
-	}
-	return readRepository{connection: connectionInstance}, nil
+func NewReadRepository(connectionInstance *sql.DB) competition.ReadRepository {
+	return readRepository{connection: connectionInstance}
 }

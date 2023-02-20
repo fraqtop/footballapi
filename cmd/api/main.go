@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/fraqtop/footballapi/internal/config"
-	"github.com/fraqtop/footballapi/internal/connection"
+	"github.com/fraqtop/footballapi/internal/container"
 	"github.com/fraqtop/footballapi/internal/server"
 	"log"
 	"net/http"
@@ -20,10 +20,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := connection.Init(); err != nil {
-		log.Fatal(err)
-	}
-	defer connection.Destroy()
+	container.Init()
 
 	go func() {
 		if err := server.Serve(); err != nil && err != http.ErrServerClosed {

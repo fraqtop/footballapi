@@ -1,23 +1,27 @@
 package server
 
 import (
-	"context"
-	"github.com/fraqtop/footballapi/internal/config"
-	"github.com/fraqtop/footballapi/internal/connection"
-	"github.com/fraqtop/footballapi/internal/repository/competition"
+	"github.com/fraqtop/footballapi/internal/container"
+	"github.com/fraqtop/footballapi/internal/output"
+	corecompetition "github.com/fraqtop/footballcore/competition"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 	"net/http"
 )
 
 func competitionListHandler(ctx echo.Context) error {
-	competitionRepository, err := competition.NewReadRepository()
+	err := container.Get().Invoke(func(repository corecompetition.ReadRepository, formatter *output.CompetitionListFormatter) {
+		responses := formatter.Format(repository.All())
+
+		err := ctx.JSON(http.StatusOK, responses)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, output.ErrorResponse{Message: err.Error()})
+		}
+	})
+
 	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, errorResponse{Reason: err.Error()})
+		log.Warn(err)
 	}
-	cache := connection.GetRedisClient(config.GetCacheConfig())
-	competitionRepository = competition.NewRepositoryCacheProxy(context.Background(), cache, competitionRepository)
 
-	formatter := newCompetitionListFormatter()
-
-	return ctx.JSON(http.StatusOK, formatter.format(competitionRepository.All()))
+	return err
 }

@@ -5,8 +5,6 @@ import (
 	"github.com/fraqtop/footballcore/competition"
 )
 
-var repository *writeRepository
-
 type writeRepository struct {
 	connection *sql.DB
 }
@@ -27,10 +25,5 @@ func (w writeRepository) Save(competition competition.Competition) error {
 }
 
 func NewWriteRepository(connection *sql.DB) competition.WriteRepository {
-	if repository == nil {
-		repository = &writeRepository{
-			connection: connection,
-		}
-	}
-	return repository
+	return &writeRepository{connection: connection}
 }
