@@ -2,6 +2,7 @@ package team
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/fraqtop/footballcore/team"
 	"strings"
@@ -13,9 +14,14 @@ type writeRepository struct {
 	connection *sql.DB
 }
 
-var _ team.WriteRepository = (*writeRepository)(nil)
+var (
+	_              team.WriteRepository = (*writeRepository)(nil)
+	ErrInvalidTeam                      = errors.New("team is invalid and was not saved")
+)
 
-func (w writeRepository) BatchUpdate(teams []team.Team) error {
+func (this writeRepository) BatchUpdate(teams []team.Team) error {
+	inputTeamsLen := len(teams)
+	teams = this.filterValid(teams)
 	var insertQueryParts []string
 
 	for _, entity := range teams {
@@ -30,7 +36,7 @@ func (w writeRepository) BatchUpdate(teams []team.Team) error {
 		"returning id"
 
 	queryToExecute := fmt.Sprintf(queryPattern, strings.Join(insertQueryParts, ","))
-	rows, err := w.connection.Query(queryToExecute)
+	rows, err := this.connection.Query(queryToExecute)
 
 	if err != nil {
 		return err
@@ -45,7 +51,23 @@ func (w writeRepository) BatchUpdate(teams []team.Team) error {
 		i++
 	}
 
+	if inputTeamsLen != len(teams) {
+		return ErrInvalidTeam
+	}
+
 	return nil
+}
+
+func (this writeRepository) filterValid(teams []team.Team) []team.Team {
+	result := make([]team.Team, 0, len(teams))
+
+	for _, entity := range teams {
+		if entity.IsValid() {
+			result = append(result, entity)
+		}
+	}
+
+	return result
 }
 
 func NewWriteRepository(connection *sql.DB) team.WriteRepository {
