@@ -2,6 +2,7 @@ package stats
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	corecompetition "github.com/fraqtop/footballcore/competition"
 	"github.com/fraqtop/footballcore/stats"
@@ -15,13 +16,18 @@ type writeRepository struct {
 	teamWriteRepository        coreteam.WriteRepository
 }
 
-var _ stats.WriteRepository = (*writeRepository)(nil)
+var (
+	_               stats.WriteRepository = (*writeRepository)(nil)
+	ErrStatsInvalid                       = errors.New("stats are invalid and were not saved")
+)
 
-func (w writeRepository) BatchUpdate(stats []stats.Stats) error {
-	if err := w.syncTeams(stats); err != nil {
+func (this writeRepository) BatchUpdate(stats []stats.Stats) error {
+	var insertQueryParts []string
+	inputStatsLen := len(stats)
+	stats = this.filterValid(stats)
+	if err := this.syncTeams(stats); err != nil {
 		return err
 	}
-	var insertQueryParts []string
 	distinctCompetitions := make(map[int]corecompetition.Competition)
 	for _, currentStats := range stats {
 		distinctCompetitions[currentStats.Competition().Id()] = currentStats.Competition()
@@ -43,7 +49,7 @@ func (w writeRepository) BatchUpdate(stats []stats.Stats) error {
 		)
 	}
 
-	if err := w.syncCompetitions(distinctCompetitions); err != nil {
+	if err := this.syncCompetitions(distinctCompetitions); err != nil {
 		return err
 	}
 
@@ -60,12 +66,19 @@ func (w writeRepository) BatchUpdate(stats []stats.Stats) error {
 		"passed = excluded.passed;"
 
 	queryToExecute := fmt.Sprintf(sqlPattern, strings.Join(insertQueryParts, ","))
-	_, err := w.connection.Exec(queryToExecute)
+	_, err := this.connection.Exec(queryToExecute)
+	if err != nil {
+		return err
+	}
+
+	if inputStatsLen != len(stats) {
+		err = ErrStatsInvalid
+	}
 
 	return err
 }
 
-func (w writeRepository) syncTeams(stats []stats.Stats) error {
+func (this writeRepository) syncTeams(stats []stats.Stats) error {
 	distinctTeams := make(map[string]coreteam.Team)
 	for _, currentStats := range stats {
 		distinctTeams[currentStats.Team().TitleShort()+currentStats.Team().TitleFull()] = currentStats.Team()
@@ -76,17 +89,29 @@ func (w writeRepository) syncTeams(stats []stats.Stats) error {
 		teams = append(teams, currentTeam)
 	}
 
-	return w.teamWriteRepository.BatchUpdate(teams)
+	return this.teamWriteRepository.BatchUpdate(teams)
 }
 
-func (w writeRepository) syncCompetitions(competitions map[int]corecompetition.Competition) error {
+func (this writeRepository) syncCompetitions(competitions map[int]corecompetition.Competition) error {
 	for _, currentCompetition := range competitions {
-		if err := w.competitionWriteRepository.Save(currentCompetition); err != nil {
+		if err := this.competitionWriteRepository.Save(currentCompetition); err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+func (this writeRepository) filterValid(inputStats []stats.Stats) []stats.Stats {
+	result := make([]stats.Stats, 0, len(inputStats))
+
+	for _, entity := range inputStats {
+		if entity.IsValid() {
+			result = append(result, entity)
+		}
+	}
+
+	return result
 }
 
 func NewWriteRepository(
