@@ -15,13 +15,13 @@ var (
 	ErrInvalidCompetition                             = errors.New("competition is invalid, can't save")
 )
 
-func (w writeRepository) Save(competition competition.Competition) error {
+func (this writeRepository) Save(competition competition.Competition) error {
 	if !competition.IsValid() {
 		return ErrInvalidCompetition
 	}
 
 	var err error
-	_, err = w.connection.Exec("insert into competition (id, title) "+
+	_, err = this.connection.Exec("insert into competition (id, title) "+
 		"values ($1, $2) "+
 		"on conflict(id) do update "+
 		"set title = excluded.title", competition.Id(), competition.Title())
