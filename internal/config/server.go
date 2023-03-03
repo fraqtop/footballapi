@@ -1,7 +1,7 @@
 package config
 
 type ServerConfig struct {
-	port string
+	port  string
 	debug bool
 }
 
