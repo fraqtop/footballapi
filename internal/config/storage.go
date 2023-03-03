@@ -8,22 +8,22 @@ type StorageConfig struct {
 	name     string
 }
 
-func (sc StorageConfig) Host() string {
-	return sc.host
+func (this StorageConfig) Host() string {
+	return this.host
 }
 
-func (sc StorageConfig) Port() string {
-	return sc.port
+func (this StorageConfig) Port() string {
+	return this.port
 }
 
-func (sc StorageConfig) User() string {
-	return sc.user
+func (this StorageConfig) User() string {
+	return this.user
 }
 
-func (sc StorageConfig) Password() string {
-	return sc.password
+func (this StorageConfig) Password() string {
+	return this.password
 }
 
-func (sc StorageConfig) Name() string {
-	return sc.name
+func (this StorageConfig) Name() string {
+	return this.name
 }

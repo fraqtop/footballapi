@@ -12,7 +12,7 @@ var serverInstance *echo.Echo
 func Serve() error {
 	serverConfig := config.GetServerConfig()
 	serverInstance = echo.New()
-	registerRoutes(serverInstance)
+	registerRoutes(serverInstance, serverConfig)
 	if err := serverInstance.Start(fmt.Sprintf(":%s", serverConfig.Port())); err != nil {
 		return err
 	}
