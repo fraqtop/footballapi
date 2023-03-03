@@ -35,6 +35,7 @@ func GetServerConfig() *ServerConfig {
 	if serverConfig == nil {
 		serverConfig = &ServerConfig{
 			port: os.Getenv("SERVER_INNER_PORT"),
+			debug: os.Getenv("SERVER_DEBUG") == "1",
 		}
 	}
 
