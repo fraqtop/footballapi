@@ -1,8 +1,6 @@
-version: '3'
-
 services:
   database:
-    image: postgres:14
+    image: postgres:17
     container_name: footballapi-database
     volumes:
       - /mnt/footballdata:/var/lib/postgresql/data
@@ -12,7 +10,7 @@ services:
       - .env
 
   server:
-    image: golang:1.20-alpine
+    image: golang:1.22.11-alpine
     container_name: footballapi-server
     working_dir: /app/src
     volumes:
@@ -33,7 +31,7 @@ services:
       --requirepass ${CACHE_PASSWORD}
 
   worker-competition:
-    image: golang:1.20-alpine
+    image: golang:1.22.11-alpine
     container_name: footballapi-worker-competition
     working_dir: /app/src
     restart: unless-stopped
@@ -48,7 +46,7 @@ services:
     entrypoint: "go run ./cmd/worker/competition"
 
   worker-team:
-    image: golang:1.20-alpine
+    image: golang:1.22.11-alpine
     container_name: footballapi-worker-team
     working_dir: /app/src
     restart: unless-stopped
@@ -63,7 +61,7 @@ services:
     entrypoint: "go run ./cmd/worker/team"
 
   worker-stats:
-    image: golang:1.20-alpine
+    image: golang:1.22.11-alpine
     container_name: footballapi-worker-stats
     working_dir: /app/src
     restart: unless-stopped
@@ -77,28 +75,18 @@ services:
       - broker
     entrypoint: "go run ./cmd/worker/stats"
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.0
-    container_name: footballapi-zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-
   broker:
-    image: confluentinc/cp-kafka:7.3.0
+    image: bitnami/kafka:latest
     container_name: footballapi-broker
     ports:
       - "9092:9092"
-    depends_on:
-      - zookeeper
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 'footballapi-zookeeper:2181'
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://footballapi-broker:9092,PLAINTEXT_INTERNAL://footballapi-broker:29092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
 
 volumes:
   apicompilecache:

@@ -1,12 +1,13 @@
 package server
 
 import (
+	"net/http"
+
 	"github.com/fraqtop/footballapi/internal/container"
 	"github.com/fraqtop/footballapi/internal/output"
 	corecompetition "github.com/fraqtop/footballcore/competition"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
-	"net/http"
 )
 
 func competitionListHandler(ctx echo.Context) error {
@@ -14,6 +15,7 @@ func competitionListHandler(ctx echo.Context) error {
 		responses := formatter.Format(repository.All())
 
 		err := ctx.JSON(http.StatusOK, responses)
+
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, output.ErrorResponse{Message: err.Error()})
 		}
